@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About Hot Beans Web</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div id="logout-notification" class="logout-notification" style="opacity: 0;">Logged out successfully!</div>
+  <header>
+    <nav>
+      <a href="index.html">
+        <img src="images/logo.png" alt="Hot Beans Web Logo" class="logo" />
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html" class="active">About Us</a></li>
+        <li><a href="jobs.html">Job Listings</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li class="auth-item"><a href="login.html" class="login-btn" id="login-link">Login</a></li>
+        <li class="auth-item" style="display: none;"><a href="#" class="login-btn" id="logout-link">Logout</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="about-hero">
+    <h1>About Hot Beans Web</h1>
+    <p>Young London developers crafting innovative web solutions and empowering new talent</p>
+  </section>
+
+  <section class="content">
+    <div class="about-container">
+      <div class="about-section">
+        <div class="about-image">
+          <img src="images/mission.jpg" alt="Our Mission" />
+        </div>
+        <div class="about-text">
+          <h2>Our Mission</h2>
+          <p>
+            Hot Beans Web is dedicated to nurturing tech talent and providing
+            real-world opportunities to develop skills. We believe in innovation,
+            collaboration, and continuous learning to empower the next generation
+            of developers.
+          </p>
+        </div>
+      </div>
+      
+      <div class="about-section reverse">
+        <div class="about-image">
+          <img src="images/whoweare.jpg" alt="Who We Are" />
+        </div>
+        <div class="about-text">
+          <h2>Who We Are</h2>
+          <p>
+            Hot Beans Web is a passionate team of young developers, designers, and
+            tech enthusiasts based in London, committed to shaping the future of
+            technology. Founded on the principle of bridging the gap between
+            education and industry, we actively mentor young talent and equip them
+            with practical experience and confidence to succeed in the tech world.
+          </p>
+          <p>
+            Our community-driven approach emphasises teamwork, creativity, and
+            innovation, allowing us to create impactful digital solutions while
+            fostering a supportive environment where everyone can thrive.
+          </p>
+        </div>
+      </div>
+      
+      <div class="about-section">
+        <div class="about-image">
+          <img src="images/whatwedo.jpg" alt="What We Do" />
+        </div>
+        <div class="about-text">
+          <h2>What We Do</h2>
+          <p>
+            At Hot Beans Web, we specialise in designing and developing dynamic
+            websites, intuitive applications, and robust digital solutions tailored
+            to our clients' unique needs. Our projects range from responsive web
+            designs and mobile apps to complex back-end systems and emerging
+            technologies such as artificial intelligence and blockchain.
+          </p>
+          <p>
+            Through hands-on projects, mentorship programmes, and collaborative workshops,
+            we empower aspiring developers to gain valuable real-world experience,
+            refine their coding skills, and bring innovative ideas to life.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 Hot Beans Web. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check if user is logged in
+      const user = JSON.parse(sessionStorage.getItem('user') || localStorage.getItem('user') || 'null');
+      const loginItem = document.getElementById('login-link').parentElement;
+      const logoutItem = document.getElementById('logout-link').parentElement;
+      
+      if (user) {
+        // User is logged in, show logout link
+        loginItem.style.display = 'none';
+        logoutItem.style.display = 'flex';
+        
+        // Add logout functionality
+        document.getElementById('logout-link').addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          // Clear user data from storage
+          sessionStorage.removeItem('user');
+          localStorage.removeItem('user');
+          
+          // Show logout notification
+          const notification = document.getElementById('logout-notification');
+          notification.style.opacity = '1';
+          
+          // Hide notification after 1 second and reload
+          setTimeout(function() {
+            notification.style.opacity = '0';
+            setTimeout(function() {
+              window.location.reload();
+            }, 300);
+          }, 1000);
+        });
+      } else {
+        // User is not logged in, show login link
+        loginItem.style.display = 'flex';
+        logoutItem.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>

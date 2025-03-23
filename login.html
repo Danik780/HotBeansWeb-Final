@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - Hot Beans Web</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="login">
+  <header>
+    <nav>
+      <a href="index.html">
+        <img src="images/logo.png" alt="Hot Beans Web Logo" class="logo" />
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="jobs.html">Job Listings</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="login.html" class="login-btn">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="login-container">
+    <div class="form-header">
+      <h2>Login to Your Account</h2>
+    </div>
+    <div id="error-message" class="error-message"></div>
+    <div id="success-message" class="success-message"></div>
+    
+    <form class="login-form" id="login-form">
+      <label for="email">Email</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        placeholder="Enter your email"
+        required
+      />
+
+      <label for="password">Password</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        placeholder="Enter your password"
+        required
+      />
+
+      <div class="remember-me">
+        <input type="checkbox" id="remember-me" name="remember-me">
+        <label for="remember-me">Remember me</label>
+      </div>
+
+      <button type="submit" class="btn">Sign In</button>
+    </form>
+    <p class="signup-link">
+      Don't have an account?
+      <a href="signin.html">Create one here</a>
+    </p>
+  </section>
+
+  <footer>
+    <p>© 2025 Hot Beans Web. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('login-form');
+      const errorMsg = document.getElementById('error-message');
+      const successMsg = document.getElementById('success-message');
+
+      form.addEventListener('submit', async function(event) {
+        event.preventDefault();
+        
+        // Clear previous messages
+        errorMsg.textContent = '';
+        successMsg.textContent = '';
+        
+        // Get form data
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        const rememberMe = document.getElementById('remember-me').checked;
+        
+        // Simple validation
+        if (!email || !password) {
+          errorMsg.textContent = 'Email and password are required';
+          return;
+        }
+        
+        // Disable button during submission
+        const submitBtn = form.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Signing In...';
+        
+        try {
+          // Send login request
+          const response = await fetch('http://127.0.0.1:5000/api/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              email,
+              password
+            })
+          });
+          
+          const data = await response.json();
+          
+          // Re-enable button
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Sign In';
+          
+          if (response.ok) {
+            // Success
+            successMsg.textContent = 'Login successful! Redirecting...';
+            
+            // Store user data based on remember me setting
+            if (rememberMe) {
+              localStorage.setItem('user', JSON.stringify(data.user));
+            } else {
+              sessionStorage.setItem('user', JSON.stringify(data.user));
+            }
+            
+            // Check if there's a redirect parameter in the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const redirectPage = urlParams.get('redirect');
+            
+            // Redirect to the appropriate page
+            setTimeout(() => {
+              if (redirectPage === 'jobs') {
+                window.location.href = 'jobs.html';
+              } else if (redirectPage === 'apply') {
+                window.location.href = 'apply.html';
+              } else {
+                window.location.href = 'index.html';
+              }
+            }, 1500);
+          } else {
+            // Error
+            errorMsg.textContent = data.message || 'Invalid email or password';
+          }
+        } catch (error) {
+          // Network error
+          console.error('Login error:', error);
+          errorMsg.textContent = 'Network error. Please try again.';
+          
+          // Re-enable button
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Sign In';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

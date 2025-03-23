@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Apply - Hot Beans Web</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="apply">
+  <div id="logout-notification" class="logout-notification" style="opacity: 0;">Logged out successfully!</div>
+  <header>
+    <nav>
+      <a href="index.html">
+        <img src="images/logo.png" alt="Hot Beans Web Logo" class="logo" />
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="jobs.html">Job Listings</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li class="auth-item"><a href="login.html" class="login-btn" id="login-link">Login</a></li>
+        <li class="auth-item" style="display: none;"><a href="#" class="login-btn" id="logout-link">Logout</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="apply-hero">
+    <h1>Submit Your Application</h1>
+    <p>Join our team of talented developers</p>
+  </section>
+
+  <section class="apply-form-container">
+    <div class="apply-inner-container">
+      <h2>Upload Your CV</h2>
+      <div id="position-name" class="position-info">Position: <span id="job-title">Web Developer</span></div>
+      
+      <div id="apply-error" class="error-message"></div>
+      <div id="apply-success" class="success-message"></div>
+      
+      <form id="application-form" class="apply-form">
+      <div class="form-group">
+        <label for="full-name">Full Name</label>
+        <input 
+          type="text" 
+          id="full-name" 
+          name="full-name" 
+          placeholder="Enter your full name" 
+          required
+        />
+      </div>
+      
+      <div class="form-group">
+        <label for="phone">Phone Number</label>
+        <input 
+          type="tel" 
+          id="phone" 
+          name="phone" 
+          placeholder="Enter your phone number" 
+          required
+        />
+      </div>
+      
+      <div class="form-group">
+        <label for="cv-file">Upload CV (PDF format)</label>
+        <input 
+          type="file" 
+          id="cv-file" 
+          name="cv-file" 
+          accept=".pdf" 
+          required
+        />
+      </div>
+      
+      <div class="form-group">
+        <label for="cover-letter">Cover Letter</label>
+        <textarea 
+          id="cover-letter" 
+          name="cover-letter" 
+          rows="6" 
+          placeholder="Write a brief cover letter..."
+          required
+        ></textarea>
+      </div>
+      
+      <button type="submit" class="btn">Submit Application</button>
+    </form>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 Hot Beans Web. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check if user is logged in
+      const user = JSON.parse(sessionStorage.getItem('user') || localStorage.getItem('user') || 'null');
+      const loginItem = document.getElementById('login-link').parentElement;
+      const logoutItem = document.getElementById('logout-link').parentElement;
+      
+      // If not logged in, redirect to login page
+      if (!user) {
+        window.location.href = 'login.html?redirect=apply';
+      }
+      
+      if (user) {
+        // User is logged in, show logout link
+        loginItem.style.display = 'none';
+        logoutItem.style.display = 'flex';
+        
+        // Get job position from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const position = urlParams.get('position');
+        
+        // Update job title if provided
+        if (position) {
+          document.getElementById('job-title').textContent = decodeURIComponent(position);
+        }
+        
+        // Prefill name if available
+        if (user.firstname && user.lastname) {
+          document.getElementById('full-name').value = user.firstname + ' ' + user.lastname;
+        }
+        
+        // Add logout functionality
+        document.getElementById('logout-link').addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          // Clear user data from storage
+          sessionStorage.removeItem('user');
+          localStorage.removeItem('user');
+          
+          // Show logout notification
+          const notification = document.getElementById('logout-notification');
+          notification.style.opacity = '1';
+          
+          // Hide notification after 1 second and redirect to login
+          setTimeout(function() {
+            notification.style.opacity = '0';
+            setTimeout(function() {
+              window.location.href = 'login.html';
+            }, 300);
+          }, 1000);
+        });
+      }
+      
+      // Handle form submission
+      const form = document.getElementById('application-form');
+      const errorMsg = document.getElementById('apply-error');
+      const successMsg = document.getElementById('apply-success');
+      
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Clear messages
+        errorMsg.textContent = '';
+        successMsg.textContent = '';
+        
+        // Get form data
+        const fullName = document.getElementById('full-name').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const cvFile = document.getElementById('cv-file').files[0];
+        const coverLetter = document.getElementById('cover-letter').value.trim();
+        
+        // Basic validation
+        if (!fullName || !phone || !cvFile || !coverLetter) {
+          errorMsg.textContent = 'All fields are required';
+          return;
+        }
+        
+        // File size validation (max 5MB)
+        if (cvFile.size > 5 * 1024 * 1024) {
+          errorMsg.textContent = 'CV file size must be less than 5MB';
+          return;
+        }
+        
+        // In a real application, you would upload the file to a server here
+        // For this demo, we'll just simulate a successful submission
+        
+        // Disable the submit button
+        const submitBtn = form.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting...';
+        
+        // Simulate server processing
+        setTimeout(function() {
+          // Re-enable button
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Submit Application';
+          
+          // Show success message
+          successMsg.textContent = 'Your application has been submitted successfully!';
+          
+          // Reset form
+          form.reset();
+          
+          // Redirect to jobs page after delay
+          setTimeout(function() {
+            window.location.href = 'jobs.html';
+          }, 2000);
+        }, 1500);
+      });
+    });
+  </script>
+</body>
+</html>

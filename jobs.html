@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Job Listings - Hot Beans Web</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="jobs">
+  <div id="logout-notification" class="logout-notification" style="opacity: 0;">Logged out successfully!</div>
+  <header>
+    <nav>
+      <a href="index.html">
+        <img src="images/logo.png" alt="Hot Beans Web Logo" class="logo" />
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="jobs.html" class="active">Job Listings</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li class="auth-item"><a href="login.html" class="login-btn" id="login-link">Login</a></li>
+        <li class="auth-item" style="display: none;"><a href="#" class="login-btn" id="logout-link">Logout</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Parallax HERO SECTION for Jobs Page -->
+  <section class="jobs-hero">
+    <h1>Join Our Team</h1>
+    <p>Check out our latest job openings and start your career with us.</p>
+  </section>
+
+  <section class="jobs-content">
+    <div class="jobs-intro">
+      <h2>Current Opportunities</h2>
+      <p>At Hot Beans Web, we're always looking for talented individuals who are passionate about web development and design. Join our dynamic team and help us create innovative digital solutions.</p>
+    </div>
+
+    <div class="jobs-container">
+      <!-- Frontend Developer Position -->
+      <div class="job-card">
+        <div class="job-icon">
+          <img src="images/frontend.jpg" alt="Frontend Developer" />
+        </div>
+        <div class="job-details">
+          <h3>Frontend Developer</h3>
+          <div class="job-meta">
+            <span class="job-type">Full-time</span>
+            <span class="job-location">London, UK</span>
+          </div>
+          <p>We're looking for a creative and detail-oriented Frontend Developer to craft visually stunning, user-friendly interfaces using HTML, CSS, and JavaScript.</p>
+          <div class="job-highlights">
+            <div class="highlight-item">
+              <h4>Skills Required</h4>
+              <p>HTML5, CSS3, JavaScript, React or Vue.js, Responsive design</p>
+            </div>
+            <div class="highlight-item">
+              <h4>Benefits</h4>
+              <p>Competitive salary, Remote work options, Professional development</p>
+            </div>
+          </div>
+          <a href="#" class="btn job-apply-btn" data-position="Frontend Developer">Apply</a>
+        </div>
+      </div>
+
+      <!-- Backend Developer Position -->
+      <div class="job-card">
+        <div class="job-icon">
+          <img src="images/backend.jpg" alt="Backend Developer" />
+        </div>
+        <div class="job-details">
+          <h3>Backend Developer</h3>
+          <div class="job-meta">
+            <span class="job-type">Full-time</span>
+            <span class="job-location">London, UK (Hybrid)</span>
+          </div>
+          <p>Be the backbone of our web applications. We're seeking a skilled backend engineer with expertise in server-side languages, databases, and APIs.</p>
+          <div class="job-highlights">
+            <div class="highlight-item">
+              <h4>Skills Required</h4>
+              <p>Node.js, Python, or Java, SQL and NoSQL databases, RESTful API design</p>
+            </div>
+            <div class="highlight-item">
+              <h4>Benefits</h4>
+              <p>Competitive salary, Flexible schedule, Health and wellness package</p>
+            </div>
+          </div>
+          <a href="#" class="btn job-apply-btn" data-position="Backend Developer">Apply</a>
+        </div>
+      </div>
+
+      <!-- UX/UI Designer Position -->
+      <div class="job-card">
+        <div class="job-icon">
+          <img src="images/uxdesign.jpg" alt="UX/UI Designer" />
+        </div>
+        <div class="job-details">
+          <h3>UX/UI Designer</h3>
+          <div class="job-meta">
+            <span class="job-type">Full-time</span>
+            <span class="job-location">London, UK</span>
+          </div>
+          <p>Shape delightful user experiences. This role involves user research, wireframing, prototyping, and collaborating with developers to ensure modern, intuitive interfaces.</p>
+          <div class="job-highlights">
+            <div class="highlight-item">
+              <h4>Skills Required</h4>
+              <p>Figma, Adobe XD, User research methods, Interactive prototyping</p>
+            </div>
+            <div class="highlight-item">
+              <h4>Benefits</h4>
+              <p>Competitive salary, Creative environment, Career advancement</p>
+            </div>
+          </div>
+          <a href="#" class="btn job-apply-btn" data-position="UX/UI Designer">Apply</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="jobs-cta">
+      <h2>Don't see the right position?</h2>
+      <p>We're always on the lookout for fresh talent. Send us your resume and cover letter, and we'll keep you in mind for future opportunities.</p>
+      <a href="contact.html" class="btn">Contact Us</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 Hot Beans Web. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check if user is logged in
+      const user = JSON.parse(sessionStorage.getItem('user') || localStorage.getItem('user') || 'null');
+      const loginItem = document.getElementById('login-link').parentElement;
+      const logoutItem = document.getElementById('logout-link').parentElement;
+      
+      if (user) {
+        // User is logged in, show logout link
+        loginItem.style.display = 'none';
+        logoutItem.style.display = 'flex';
+        
+        // Add logout functionality
+        document.getElementById('logout-link').addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          // Clear user data from storage
+          sessionStorage.removeItem('user');
+          localStorage.removeItem('user');
+          
+          // Show logout notification
+          const notification = document.getElementById('logout-notification');
+          notification.style.opacity = '1';
+          
+          // Hide notification after 1 second and reload
+          setTimeout(function() {
+            notification.style.opacity = '0';
+            setTimeout(function() {
+              window.location.reload();
+            }, 300);
+          }, 1000);
+        });
+      } else {
+        // User is not logged in, show login link
+        loginItem.style.display = 'flex';
+        logoutItem.style.display = 'none';
+      }
+      
+      // Handle Apply button clicks
+      const applyButtons = document.querySelectorAll('.job-apply-btn');
+      
+      applyButtons.forEach(function(button) {
+        button.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          const position = this.getAttribute('data-position');
+          
+          if (user) {
+            // User is logged in, redirect to apply page
+            window.location.href = 'apply.html?position=' + encodeURIComponent(position);
+          } else {
+            // User is not logged in, redirect to login page
+            window.location.href = 'login.html?redirect=jobs';
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

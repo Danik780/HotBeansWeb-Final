@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us - Hot Beans Web</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="contact">
+    <div id="logout-notification" class="logout-notification" style="opacity: 0; visibility: hidden;">Logged out successfully!</div>
+    <div id="message-notification" class="message-notification" style="opacity: 0; background-color: rgba(0, 150, 0, 0.9);">Message sent successfully!</div>
+    <header>
+        <nav>
+            <a href="index.html">
+                <img src="images/logo.png" alt="Hot Beans Web Logo" class="logo">
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="jobs.html">Job Listings</a></li>
+                <li><a href="contact.html" class="active">Contact</a></li>
+                <li class="auth-item"><a href="login.html" class="login-btn" id="login-link">Login</a></li>
+                <li class="auth-item" style="display: none;"><a href="#" class="login-btn" id="logout-link">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="contact-hero">
+        <h1>Contact Us</h1>
+        <p>Have questions? Get in touch with us.</p>
+    </section>
+
+    <section class="content" id="contact-section">
+        <div class="contact-container">
+            <div class="contact-form-container">
+                <h2>Send Us a Message</h2>
+                <form class="contact-form" id="contactForm">
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" name="name" placeholder="Enter your name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" name="subject" placeholder="Enter subject">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="5" placeholder="Enter your message" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn">Send Message</button>
+                </form>
+            </div>
+            
+            <div class="contact-info-container">
+                <h2>Contact Information</h2>
+                <div class="contact-details">
+                    <div class="contact-icon">
+                        <i class="location-icon"></i>
+                    </div>
+                    <div class="contact-text">
+                        <h3>Visit Us</h3>
+                        <p>London Bridge, London EC4R 3TN, UK</p>
+                    </div>
+                </div>
+                
+                <div class="contact-details">
+                    <div class="contact-icon">
+                        <i class="phone-icon"></i>
+                    </div>
+                    <div class="contact-text">
+                        <h3>Call Us</h3>
+                        <p>+44 1234 567890</p>
+                    </div>
+                </div>
+                
+                <div class="contact-details">
+                    <div class="contact-icon">
+                        <i class="email-icon"></i>
+                    </div>
+                    <div class="contact-text">
+                        <h3>Email Us</h3>
+                        <p>contact@hotbeansweb.com</p>
+                    </div>
+                </div>
+                
+                <div class="contact-hours">
+                    <h3>Business Hours</h3>
+                    <p>Monday - Friday: 9:00 AM - 5:00 PM</p>
+                    <p>Saturday & Sunday: Closed</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="map-container">
+        <h2>Find Us</h2>
+        <div class="google-map">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2483.178294245654!2d-0.08885912339712922!3d51.507920079535094!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4876035159bb13c5%3A0xa61e28267c3563ac!2sLondon%20Bridge%2C%20London%20EC4R%203TN%2C%20UK!5e0!3m2!1sen!2sus!4v1711207271234!5m2!1sen!2sus" 
+                width="100%" 
+                height="450" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 Hot Beans Web. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in
+            const user = JSON.parse(sessionStorage.getItem('user') || localStorage.getItem('user') || 'null');
+            const loginItem = document.getElementById('login-link').parentElement;
+            const logoutItem = document.getElementById('logout-link').parentElement;
+            
+            if (user) {
+                // User is logged in, show logout link
+                loginItem.style.display = 'none';
+                logoutItem.style.display = 'flex';
+                
+                // Add logout functionality
+                document.getElementById('logout-link').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Clear user data from storage
+                    sessionStorage.removeItem('user');
+                    localStorage.removeItem('user');
+                    
+                    // Show logout notification
+                    const notification = document.getElementById('logout-notification');
+                    notification.style.opacity = '1';
+                    notification.style.visibility = 'visible';
+                    
+                    // Hide notification after 1 second and reload
+                    setTimeout(function() {
+                      notification.style.opacity = '0';
+                      setTimeout(function() {
+                        notification.style.visibility = 'hidden';
+                        window.location.reload();
+                      }, 300);
+                    }, 1000);
+                });
+            } else {
+                // User is not logged in, show login link
+                loginItem.style.display = 'flex';
+                logoutItem.style.display = 'none';
+            }
+            
+            // Contact form submission
+            const contactForm = document.getElementById('contactForm');
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // In a real application, you would send the form data to a server here
+                    // For this demo, we'll just show the notification and reset the form
+                    
+                    // Show success notification
+                    const notification = document.getElementById('message-notification');
+                    notification.style.opacity = '1';
+                    notification.style.visibility = 'visible';
+                    
+                    // Reset the form
+                    contactForm.reset();
+                    
+                    // Hide notification after 3 seconds
+                    setTimeout(function() {
+                        notification.style.opacity = '0';
+                        // Wait for fade out transition before hiding completely
+                        setTimeout(function() {
+                            notification.style.visibility = 'hidden';
+                        }, 300);
+                    }, 3000);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
